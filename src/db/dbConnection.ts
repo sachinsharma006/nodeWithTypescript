@@ -8,6 +8,8 @@ const connectToDB = async () => {
   console.log(typeof process.env.DB_URL)
   console.log(DB_URL)
   try {
+    // const URL =
+    //   "mongodb+srv://sachin006:sachin006@cluster0.hel6j.mongodb.net/?retryWrites=true&w=majority";
 
     const client = new MongoClient(DB_URL);
     await client.connect();
