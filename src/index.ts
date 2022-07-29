@@ -26,37 +26,49 @@ app.post("/add", async (req: Request, res: Response) => {
 
 //! delete a specific route
 app.delete("/delete/:id", async (req: Request, res: Response) => {
-  const data = await collection.deleteMany({
-    id: parseInt(req.params.id),
-  });
+  try {
+    const data = await collection.deleteMany({
+      id: parseInt(req.params.id),
+    });
+    res.json({ status: "ok", action: "task deleted" });
+  } catch (err) {
+    res.json({ status: "error" });
+  }
 
   console.log(req.params.id);
-  res.json({ status: "ok", action: "task deleted" });
 });
 
 //! get all tasks route
 app.get("/tasks", async (req: Request, res: Response) => {
-  const data = await collection.find().toArray();
-  res.json({ status: "ok", data });
+  try {
+    const data = await collection.find().toArray();
+    res.json({ status: "ok", data });
+  } catch (err) {
+    res.json({ status: "error" });
+  }
 });
 
 //! update a task
 app.put("/update/:id", async (req: Request, res: Response) => {
   const { task } = req.body;
-  const data = collection.updateOne(
-    { id: parseInt(req.params.id) },
-    {
-      $set: {
-        task: task,
-      },
-    }
-  );
+  try {
+    const data = collection.updateOne(
+      { id: parseInt(req.params.id) },
+      {
+        $set: {
+          task: task,
+        },
+      }
+    );
 
-  res.json({ status: "ok", action: "Task Updated" });
+    res.json({ status: "ok", action: "Task Updated" });
+  } catch (err) {
+    res.json({ status: "error" });
+  }
 });
 
-app.listen(8000, () => {
+app.listen(process.env.PORT, () => {
   // console.log(process.env)
   connectToDB();
-  console.log(`server Started at ${8000}`);
+  console.log(`server Started at ${process.env.PORT}`);
 });
